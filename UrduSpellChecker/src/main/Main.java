@@ -1,16 +1,21 @@
 package main;
 
 import presentationLayer.Controller;
+import presentationLayer.View;
+
 import businessLayer.Model;
+import dataAccessLayer.DataBase;
+
+
 
 public class Main {
 	
-public static void main(String[] args) {
+public static void main(String[] args){
 		
-	    Controller c = new Controller();
-	    c.path();
-		
+	    new Controller(new View(new DataBase()),new Model(),new DataBase());
+	   
+	   
 	}
 
-
+ 
 }

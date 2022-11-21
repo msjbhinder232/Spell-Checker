@@ -1,20 +1,31 @@
 package presentationLayer;
 import  businessLayer.Model;
+import  dataAccessLayer.DataBase;
 
-import java.io.File;
 
 public class Controller {
 	
 private Model model;
+private DataBase db;
+private View view;
 	
-public Controller() {
+public Controller(View v,Model m,DataBase d) {
 	
-	new View();
-	model = new Model();
+	view = v;
+	model = m;
+	db = d;
+	
+	
 }
 
 public void path() {
 	model.folderPath();
+}
+
+
+
+public void addData() {
+	view.addButton();
 }
 
 
