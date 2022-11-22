@@ -18,9 +18,9 @@ public class View extends JFrame implements ActionListener {
 	JTextField t =new JTextField("");  
 	JButton button,button2;
 	private DataBase db;
-	public View(DataBase d) {
+	public View() {
 		
-		db = d;
+		db = new DataBase();
 		 
 		button = new JButton("Browse File");
 		button.setBounds(270, 100, 100, 30);
@@ -60,19 +60,35 @@ public void browseButton() {
 		
 		JFileChooser fileChooser = new JFileChooser();
 		fileChooser.setDialogTitle("Select XML File");
-		fileChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES); 
+		fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY); 
 		
 		int response = fileChooser.showOpenDialog(null);
 		if (response == JFileChooser.APPROVE_OPTION) {
-			File file = new File(fileChooser.getSelectedFile().getAbsoluteFile(), "");
-			String path = file.getAbsolutePath();
-			t.setText(path);		
+			File directoryPath = new File(fileChooser.getSelectedFile().getAbsoluteFile(), "");
+			String path = directoryPath.getAbsolutePath();
+			t.setText(path);
+			
+			  String folderPath = path;
+			  
+			  File folder = new File(folderPath);
+			  
+			  File[] files = folder.listFiles();
+			  
+			  //iterate the files array
+			  for(File file:files) {
+			   //check if the file
+			   if(file.isFile()) {
+			    //System.out.println("File - "+file.getName());
+			   }
+			  }
 			
 		}	
 	}
 	catch(Exception e) {
 		JOptionPane.showMessageDialog(null, "Cannot select file");
 	}
+	
+	
 		
 	}
 

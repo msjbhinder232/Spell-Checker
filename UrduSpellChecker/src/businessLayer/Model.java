@@ -1,6 +1,9 @@
 package businessLayer;
+import java.io.BufferedReader;
 import java.io.File;
-
+import java.io.FileNotFoundException;
+import java.util.HashMap;
+import java.io.FileReader;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -15,10 +18,14 @@ public class Model {
 	private String title;
 	private String author;
 	private String paragraph;
+	HashMap<String, Integer> frequency = new HashMap<>();
+
 	
 	public Model() {
 		
 		readFile();
+		
+		
 		
 	}
 	
@@ -70,22 +77,58 @@ public class Model {
 	public void folderPath() {
 
 		
-		
-		 String folderPath = "C:\\Users\\Mr Laptop\\Desktop\\";
-		  
-		  File folder = new File(folderPath);
-		  
-		  File[] files = folder.listFiles();
-		  
-		  //iterate the files array
-		  for(File file:files) {
-		   //check if the file
-		   if(file.isFile()) {
-		    //System.out.println("File - "+file.getName());
-		   }
-		  }
 	}
 
+	 /*
+	   * author: Fahad-Bin-Imran 
+	   * (20F-0194)
+	   * 
+	   * Make countWord function to maintain the frequency of words
+	   * */
+	public void countWord() throws Exception {
+		
+		
+		try (BufferedReader reader = new BufferedReader(new FileReader("C:\\Users\\Mr Laptop\\Desktop\\demo\\dem.xml"))) {
+			
+
+			String line = reader.readLine();
+			while(line != null) {
+				
+				
+				if(!line.trim().equals("")) {
+					String [] words = line.split(" ");
+					
+					for(String word : words) {
+						if(word == null || word.trim().equals("")) {
+							continue;
+						}
+						String processed = word.toLowerCase();
+						processed = processed.replaceAll("\\<.*?>", "");
+						processed = processed.replaceAll("(?U)[\\W_]+", "");
+						processed = processed.replaceAll("[a-zA-Z]+", "");
+						processed = processed.replaceAll("[0-9]", "");
+						processed = processed.replaceAll("\"<([^<]*)>", "");
+			            processed = processed.replaceAll("</([^<]*)>\"", "");
+			            processed = processed.replaceAll("\"([^<]*)<([^<]*)>([^<]*)\"", "\"$1&lt;$2&gt;$3\"");
+						
+						
+						if(frequency.containsKey(processed)) {
+							frequency.put(processed, 
+									frequency.get(processed) + 1);
+						} else {
+							frequency.put(processed, 1);
+						}
+					}
+				}
+				
+				line = reader.readLine();
+			}
+			
+			
+			System.out.println(frequency);
+		}
+	}
+	
 	
 	public String getTitle() {
 		return title;
@@ -110,4 +153,7 @@ public class Model {
 	public void setParagraph(String paragraph) {
 		this.paragraph = paragraph;
 	}
+	
+	
+	
 }
