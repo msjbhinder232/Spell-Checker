@@ -1,4 +1,4 @@
-package com.mycompany.spellchecker;
+package businessLayer;
 
 /**
 * Generate Mutants of Each Word Automatically:

@@ -1,5 +1,5 @@
 // package
-package com.mycompany.spellchecker;
+package businessLayer;
 
 // HashMap is similar to HashTable, but it is unsynchronized.
 //It allows to store the null keys as well, but there should be 
