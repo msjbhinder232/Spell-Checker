@@ -15,12 +15,7 @@ public Controller(View v,Model m,DataBase d) {
 	view = v;
 	model = m;
 	db = d;
-	try {
-		model.countWord();
-	} catch (Exception e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	}
+	model.words();
 	
 	
 }

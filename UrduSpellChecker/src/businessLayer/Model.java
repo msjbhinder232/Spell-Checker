@@ -2,8 +2,17 @@ package businessLayer;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
+import java.util.Scanner;
+import java.util.Set;
 import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -19,6 +28,7 @@ public class Model {
 	private String author;
 	private String paragraph;
 	HashMap<String, Integer> frequency = new HashMap<>();
+	HashMap<String, Integer> words = new HashMap<>();
 
 	
 	public Model() {
@@ -56,7 +66,7 @@ public class Model {
 		  title = document.getElementsByTagName("title").item(0).getTextContent();  
 		  author = document.getElementsByTagName("name").item(0).getTextContent();  
 		  paragraph = document.getElementsByTagName("section").item(0).getTextContent();  
-		
+		  
 		  
 		  
 		  }  
@@ -105,10 +115,10 @@ public class Model {
 						String processed = word.toLowerCase();
 						processed = processed.replaceAll("\\<.*?>", "");
 						processed = processed.replaceAll("(?U)[\\W_]+", "");
+						processed = processed.replaceAll("\"<([^<]*)>", "");
+					    processed = processed.replaceAll("</([^<]*)>\"", "");
 						processed = processed.replaceAll("[a-zA-Z]+", "");
 						processed = processed.replaceAll("[0-9]", "");
-						processed = processed.replaceAll("\"<([^<]*)>", "");
-			            processed = processed.replaceAll("</([^<]*)>\"", "");
 			            processed = processed.replaceAll("\"([^<]*)<([^<]*)>([^<]*)\"", "\"$1&lt;$2&gt;$3\"");
 						
 						
@@ -130,6 +140,82 @@ public class Model {
 	}
 	
 	
+	 /*
+	   * author: Fahad-Bin-Imran 
+	   * (20F-0194)
+	   * 
+	   * Make words function to remove the duplicate words from file
+	   * */
+	public void words() {
+		
+		try {
+			
+			String line = getParagraph();
+			String [] words = line.split(" ");
+		    
+			for(int i=0;i<words.length;i++)  
+		    {
+		      if(words[i]!=null)
+		      {
+		      
+		      for(int j=i+1;j<words.length;j++)         
+		      {
+		        
+		      if(words[i].equals(words[j]))         
+		        {
+		          words[j]=null;      
+		          
+		        }
+		      }
+		      }
+		    }
+		    for(int k=0;k<words.length;k++)     
+		    {
+		      if(words[k]!=null)
+		      {
+		        System.out.print(words[k] + " ");
+		      }
+		      
+		    }
+			
+		}
+		
+		catch(Exception e) {
+			
+			
+		}
+		
+	
+		
+		
+	}
+	
+	
+	/*
+	   * author: Fahad-Bin-Imran 
+	   * (20F-0194)
+	   * 
+	   * Make make getter and setter function
+	   * */
+	
+	public HashMap<String, Integer> getFrequency() {
+		return frequency;
+	}
+
+
+	public void setFrequency(HashMap<String, Integer> frequency) {
+		this.frequency = frequency;
+	}
+
+	
+	public HashMap<String, Integer> getWords() {
+		return words;
+	}
+
+	public void setWords(HashMap<String, Integer> words) {
+		this.words = words;
+	}
+
 	public String getTitle() {
 		return title;
 	}
