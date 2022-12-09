@@ -99,8 +99,9 @@ public class AppGui extends JFrame implements ActionListener {
   public void actionPerformed(ActionEvent e) {
 	//Function of ClearBtn
     if (e.getSource() == clearBtn) {
-      inputTextArea.setText("");
-      outputTextArea.setText("");
+    	txt.setVisible(false);
+    	addBtn.setVisible(false);
+    	browseBtn.setVisible(false);
     }
     //Function of importDataBtn
     if (e.getSource() == importDataBtn) {
@@ -136,9 +137,25 @@ public class AppGui extends JFrame implements ActionListener {
 	    addBtn.setVisible(true);
 	    browseBtn.setVisible(true);
    }
+    if (e.getSource() == generateMutantsBtn) {
+    	txt.setVisible(false);
+    	addBtn.setVisible(false);
+    	browseBtn.setVisible(false);
   
+  }
+    if (e.getSource() == highlightTyposBtn) {
+    	txt.setVisible(false);
+    	addBtn.setVisible(false);
+    	browseBtn.setVisible(false);
+  
+     }
+    if (e.getSource() == giveSuggestionsBtn) {
+    	txt.setVisible(false);
+    	addBtn.setVisible(false);
+    	browseBtn.setVisible(false);
+  
+     }
+    
   }
   
 }
-  
-
