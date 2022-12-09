@@ -1,32 +1,29 @@
 package presentationLayer;
-import presentationLayer.View;
-import  businessLayer.Model;
-import  dataAccessLayer.DataBase;
+import presentationLayer.AppGui;
+import  businessLayer.ReadXmlFiles;
+import dataAccessLayer.DataBase;
 
 
 public class Controller {
 	
-private Model model;
+private ReadXmlFiles model;
+private AppGui view;
 private DataBase db;
-private View view;
 	
-public Controller(View v,Model m,DataBase d) {
-	
-	view = v;
-	model = m;
-	db = d;
-	model.words();
+public Controller() throws Exception {
 	
 	
+	model = new ReadXmlFiles();
+	db = new DataBase();
+		
 }
 
 public void path() {
-	view.browseButton();
+	model.folderPath();
 }
 
-
-public void addData() {
-	view.addButton();
+public void sendWords() {
+	db.insertWords();
 }
 
 
