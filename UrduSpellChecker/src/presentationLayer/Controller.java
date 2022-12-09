@@ -18,6 +18,7 @@ public Controller() throws Exception {
 		
 }
 
+//path function
 public void path() {
 	model.folderPath();
 }

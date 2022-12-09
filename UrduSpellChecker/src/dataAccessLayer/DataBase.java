@@ -152,7 +152,13 @@ public class DataBase {
 		}
 		
 	
-	
+
+	/*
+     * author: Fahad-Bin-Imran 
+     * (20F-0194)
+     * 
+     * Make fetchData function to get data from database
+     * */	
 	
 public String fetchData(){
 		
