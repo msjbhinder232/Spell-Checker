@@ -133,6 +133,7 @@ public class AppGui extends JFrame implements ActionListener {
     choiceLabel.setVisible(false);
     manualAddBtn.setVisible(false);
     optionLabel1.setVisible(false);
+    optionLabel2.setVisible(false);
 
     importDataBtn.addActionListener(this);
     generateMutantsBtn.addActionListener(this);
@@ -156,6 +157,7 @@ public class AppGui extends JFrame implements ActionListener {
     	manualWordTxt.setVisible(false);
     	manualAddBtn.setVisible(false);
     	optionLabel1.setVisible(false);
+    	optionLabel2.setVisible(false);
     	
     }
     //Function of importDataBtn
@@ -168,6 +170,7 @@ public class AppGui extends JFrame implements ActionListener {
     	manualWordTxt.setVisible(true);
     	manualAddBtn.setVisible(true);
     	optionLabel1.setVisible(true);
+    	optionLabel2.setVisible(true);
 
 			
     }
@@ -181,7 +184,9 @@ public class AppGui extends JFrame implements ActionListener {
     	manualWordTxt.setVisible(true);
     	manualAddBtn.setVisible(true);
     	optionLabel1.setVisible(true);
+    	optionLabel2.setVisible(true);
 		cont.path();
+		cont.sendWords();
 		JOptionPane.showMessageDialog(frame, "کامیابی سے شامل");
     }
     //Function of browseBtn
@@ -204,6 +209,7 @@ public class AppGui extends JFrame implements ActionListener {
 	    manualWordTxt.setVisible(true);
 	    manualAddBtn.setVisible(true);
 	    optionLabel1.setVisible(true);
+	    optionLabel2.setVisible(true);
    }
   //Function of generateMutantsBtn
     if (e.getSource() == generateMutantsBtn) {
@@ -212,8 +218,9 @@ public class AppGui extends JFrame implements ActionListener {
     	browseBtn.setVisible(false);
     	choiceLabel.setVisible(false);
     	manualWordTxt.setVisible(false);
-    	 manualAddBtn.setVisible(false);
-    	 optionLabel1.setVisible(false);
+    	manualAddBtn.setVisible(false);
+    	optionLabel1.setVisible(false);
+        optionLabel2.setVisible(false);
   }
   //Function of highlightTyposBtn
     if (e.getSource() == highlightTyposBtn) {
@@ -224,7 +231,7 @@ public class AppGui extends JFrame implements ActionListener {
     	 manualWordTxt.setVisible(false);
     	 manualAddBtn.setVisible(false);
     	 optionLabel1.setVisible(false);
-  
+    	 optionLabel2.setVisible(false);
      }
   //Function of giveSuggestionBtn
     if (e.getSource() == giveSuggestionsBtn) {
@@ -235,6 +242,7 @@ public class AppGui extends JFrame implements ActionListener {
         manualWordTxt.setVisible(false);
         manualAddBtn.setVisible(false);
         optionLabel1.setVisible(false);
+        optionLabel2.setVisible(false);
      }
     //Function of addWordBtn
     if (e.getSource() == addWordBtn) {
@@ -245,6 +253,22 @@ public class AppGui extends JFrame implements ActionListener {
         manualWordTxt.setVisible(false);
         manualAddBtn.setVisible(false);
         optionLabel1.setVisible(false);
+        optionLabel2.setVisible(false);
+     }
+    
+    //Function of addWordBtn
+    if (e.getSource() == manualAddBtn) {
+    	manualWordTxt.getText();
+    	txt.setVisible(true);
+    	addBtn.setVisible(true);
+    	browseBtn.setVisible(true);
+    	choiceLabel.setVisible(true);
+    	manualWordTxt.setVisible(true);
+    	manualAddBtn.setVisible(true);
+    	optionLabel1.setVisible(true);
+    	optionLabel2.setVisible(true);
+    	cont.sendmanualWords(manualWordTxt.getText());
+    	
      }
   }
   

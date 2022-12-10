@@ -27,6 +27,10 @@ public void sendWords() {
 	db.insertWords();
 }
 
+public void sendmanualWords(String string) {
+	db.addManualWord(string);
+}
+
 
 
 }

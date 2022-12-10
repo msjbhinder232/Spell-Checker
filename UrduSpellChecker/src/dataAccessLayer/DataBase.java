@@ -3,6 +3,8 @@ package dataAccessLayer;
 
 import java.io.File;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -22,6 +24,7 @@ public class DataBase {
     private String title;
 	private String author;
 	private String paragraph;
+	Map<String,Integer> mp;
     
     public DataBase() throws Exception {
     	
@@ -190,10 +193,73 @@ public String fetchData(){
 			System.out.println(e.getMessage());
 		}
 		return content;
-		
-		
+			
 		
 	}
+
+/*
+ * author: Fahad-Bin-Imran 
+ * (20F-0194)
+ * 
+ * Make addManualWord function to send user added words to database
+ * */	
+
+public void addManualWord(String string) {
+	
+	 try {
+			
+		   System.out.println("Connected");
+			
+			stmt = con.createStatement();
+			
+			String fetch = "SELECT `word` FROM `words`";
+			rs = stmt.executeQuery(fetch);
+			
+			String word = null;
+			while (rs.next()) {
+				 
+             word = rs.getString("word");
+             System.out.println(word);
+         }
+			
+			rs.close();
+
+			System.out.println("Fetched");
+		    
+		   
+		      
+		      System.out.println("Connected");
+		      
+		      stmt = con.createStatement();
+		      
+		      if (word.equals(string)) {
+		    	  
+			      
+			        String update = "UPDATE `words` SET `frequency`=  + (frequency  + 1) WHERE 'wid' = + 'wid' + ';' ";
+			    	stmt.executeUpdate(update);
+
+				    System.out.println("updated");
+		      }
+		      
+		      else {
+		      
+                  String insert = "INSERT INTO `words`(`word`, `frequency`) VALUES ('" + string + "' ,'" + 1 + "')";
+			      
+			      stmt.executeUpdate(insert);
+
+			      System.out.println("Inserted");
+		       
+		    }
+     
+	
+}
+
+  catch(Exception e) {
+	
+	System.out.println(e.getMessage());
+}
+	
+}
 
 
 }
