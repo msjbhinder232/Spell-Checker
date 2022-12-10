@@ -1,13 +1,14 @@
 package businessLayer;
 
 import dataAccessLayer.DataBase;
+import facade.FacadeInterface;
 
 import java.io.File;
 
 
 
 
-public class ReadXmlFiles {
+public class ReadXmlFiles implements FacadeInterface{
 
 	//DataBase
 	private DataBase db;
@@ -55,6 +56,27 @@ public class ReadXmlFiles {
 			  
 			 
 		  }
+	}
+
+
+	@Override
+	public void insertData(File f) {
+		// TODO Auto-generated method stub
+		System.out.println("ReadXmlFiles::insertData()");
+	}
+
+
+	@Override
+	public void insertWords() {
+		// TODO Auto-generated method stub
+		System.out.println("ReadXmlFiles::insertWords()");
+	}
+
+
+	@Override
+	public void addManualWord(String string) {
+		// TODO Auto-generated method stub
+		System.out.println("ReadXmlFiles::addManualWord()");
 	}
 		
 

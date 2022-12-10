@@ -14,8 +14,10 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.w3c.dom.Document;
 
+import facade.FacadeInterface;
 
-public class DataBase {
+
+public class DataBase implements FacadeInterface{
 	Connection con = null;
     Statement stmt = null;
     //private Model model;
@@ -259,6 +261,18 @@ public void addManualWord(String string) {
 	System.out.println(e.getMessage());
 }
 	
+}
+
+@Override
+public void folderPath() {
+	// TODO Auto-generated method stub
+	System.out.println("DataBase::folderPath()");
+}
+
+@Override
+public void readFile(String path) {
+	// TODO Auto-generated method stub
+	System.out.println("DataBase::readFile()");
 }
 
 
