@@ -29,7 +29,7 @@ public class ReadXmlFiles implements FacadeInterface{
 	   * */
 	public void folderPath() {
 		
-		 File file = new File("C:\\Users\\Mr Laptop\\Desktop\\demo");
+		 File file = new File("C:\\Users\\Mr Laptop\\Desktop\\text");
 		 String path = file.toString();
 		 try {
 		 readFile(path);
