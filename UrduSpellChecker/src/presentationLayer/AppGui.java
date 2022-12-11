@@ -6,6 +6,7 @@ import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -13,13 +14,17 @@ import javax.swing.*; // Using Swing components and containers
 import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
 
+import com.mysql.jdbc.PreparedStatement;
+
+import net.proteanit.sql.DbUtils;
+
 
 
 //GUI of the Urdu Spell Checker
 public class AppGui extends JFrame implements ActionListener {
 
   public JTextArea inputTextArea, outputTextArea; // Declare a TextArea component
-  public JButton importDataBtn, generateMutantsBtn, highlightTyposBtn, giveSuggestionsBtn, clearBtn, addBtn, browseBtn, updateWordBtn, manualAddBtn;
+  public JButton importDataBtn, generateMutantsBtn, highlightTyposBtn, giveSuggestionsBtn, clearBtn, addBtn, browseBtn, addNewWordBtn, manualAddBtn,updateDataBtn;
   public JLabel inputLabel, outputLabel,titleLabel, choiceLabel, optionLabel1,optionLabel2, idLabel, wordLabel, updateLabel; // Declare a Label component
   public JTextField txt, manualWordTxt, idTxt, wordTxt, updateWordTxt;
   public JFrame frame;
@@ -42,16 +47,14 @@ public class AppGui extends JFrame implements ActionListener {
     mainPanel.setBackground(Color.LIGHT_GRAY);
     add(mainPanel);
    
+    
+    jt1 = new JTable();
     scrollPane = new JScrollPane();
     scrollPane.setBounds(50, 156, 452, 231);
-    mainPanel.add(scrollPane);
-    		
-    String[][] data = {};
-    String[] column= {"Wid","Word","Frequency"};
-    		
-    jt1 = new JTable(data,column);
+    
     scrollPane.setViewportView(jt1);
     scrollPane.setVisible(false);
+    mainPanel.add(scrollPane);
 
 
     //importDataBtn
@@ -116,10 +119,17 @@ public class AppGui extends JFrame implements ActionListener {
     clearBtn.setBounds(620, 450, 120, 30);
     clearBtn.addActionListener(this);
     
-    updateWordBtn = new JButton("اپ ڈیٹ لفظ");
-    updateWordBtn.setBounds(620, 500, 120, 30);
-    updateWordBtn.addActionListener(this);
-    updateWordBtn.setFont(new Font("Serif", Font.BOLD, 16));
+    addNewWordBtn = new JButton("اپ ڈیٹ لفظ");
+    addNewWordBtn.setBounds(620, 500, 120, 30);
+    addNewWordBtn.addActionListener(this);
+    addNewWordBtn.setFont(new Font("Serif", Font.BOLD, 16));
+   
+    
+    updateDataBtn = new JButton("اپ ڈیٹ لفظ");
+    updateDataBtn.setBounds(250,550, 145, 30);
+    updateDataBtn.addActionListener(this);
+    updateDataBtn.setFont(new Font("Serif", Font.BOLD, 16));
+    
     
     titleLabel = new JLabel("اردو املا چیکر");
     titleLabel.setBounds(280, 80, 250, 50);
@@ -182,8 +192,9 @@ public class AppGui extends JFrame implements ActionListener {
     mainPanel.add(updateWordTxt);
     mainPanel.add(addBtn);
     mainPanel.add(browseBtn);
-    mainPanel.add(updateWordBtn);
+    mainPanel.add(addNewWordBtn);
     mainPanel.add(manualAddBtn);
+    mainPanel.add(updateDataBtn);
     txt.setVisible(false);
     manualWordTxt.setVisible(false);
     idTxt.setVisible(false);
@@ -199,17 +210,8 @@ public class AppGui extends JFrame implements ActionListener {
     wordLabel.setVisible(false);
     updateLabel.setVisible(false);
     scrollPane.setVisible(false);
+    updateDataBtn.setVisible(false);
     
-
-    importDataBtn.addActionListener(this);
-    generateMutantsBtn.addActionListener(this);
-    highlightTyposBtn.addActionListener(this);
-    giveSuggestionsBtn.addActionListener(this);
-    clearBtn.addActionListener(this);
-    updateWordBtn.addActionListener(this);
-    
-    
-
     setVisible(true);
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -218,36 +220,46 @@ public class AppGui extends JFrame implements ActionListener {
 }
   
   
-  
   public void addDataIntoJTable() throws SQLException {
 	  Connection con = null;
 	  Statement stmt = null;
 	  ResultSet rs = null;
+	  ResultSetMetaData rsmd = null;
 	  con = DriverManager.getConnection("jdbc:mysql://localhost:3306/spell_checker", "root", "");
 	  
 		try {
 			
-			System.out.println("Connected");
 			
+			System.out.println("Connected");
 			stmt = con.createStatement();
 			
 			String fetch = "SELECT * FROM `words`";
 			rs = stmt.executeQuery(fetch);
+			rsmd  = rs.getMetaData();
+		    DefaultTableModel model = (DefaultTableModel) jt1.getModel();
 			
-			while (rs.next()) {
-				 
-	            String wid = rs.getString("wid");
-	            String word = rs.getString("word");
-	            String frequency = rs.getString("frequency");
-	            
-	            String tbData [] = {wid,word,frequency};
-	            DefaultTableModel model = (DefaultTableModel) jt1.getModel();
-	            model.addRow(tbData);
-	            
-	        }
-			
-			rs.close();
+		    int col = rsmd.getColumnCount();
+		    String colName[] = new String[col];
+		    for(int i=0;i<col;i++) {
+		    	colName[i] = rsmd.getColumnName(i+1);
+		    	model.setColumnIdentifiers(colName);
+		    	String wid,word,frequency;
+		    	while (rs.next()) {
+					 
+		            wid = rs.getString(1);
+		            word = rs.getString(2);
+		            frequency = rs.getString(3);
+		            
+		            String[] row = {wid,word,frequency};
+		           
+		            model.addRow(row);
+		            
+		            
+		        }
 
+		    }
+		    rs.close();
+		    con.close();
 			System.out.println("Fetched");
 			
 		}
@@ -259,7 +271,28 @@ public class AppGui extends JFrame implements ActionListener {
 			
 	}
   
-
+  
+  
+  public void updateTable() {
+	  
+	  DefaultTableModel model = (DefaultTableModel) jt1.getModel();
+	  if(jt1.getSelectedRowCount() == 1) {
+		 
+		  String id = idTxt.getText();
+		  String word = wordTxt.getText();
+		  String newWord = updateWordTxt.getText();
+		  
+		  
+		  model.setValueAt(newWord, jt1.getSelectedRow(), 1);
+		 
+	  }
+	  else {
+		  System.out.println("Update Error");
+	  }
+  }
+  
+  
+  
   //Functions of the Buttons
   public void actionPerformed(ActionEvent e) {
 	//Function of ClearBtn
@@ -279,6 +312,7 @@ public class AppGui extends JFrame implements ActionListener {
         wordTxt.setVisible(false);
         updateWordTxt.setVisible(false);
         scrollPane.setVisible(false);
+        updateDataBtn.setVisible(false);
     	
     }
     //Function of importDataBtn
@@ -299,6 +333,7 @@ public class AppGui extends JFrame implements ActionListener {
         wordTxt.setVisible(false);
         updateWordTxt.setVisible(false);
         scrollPane.setVisible(false);
+        updateDataBtn.setVisible(false);
 			
     }
     //Function of addBtn
@@ -315,6 +350,7 @@ public class AppGui extends JFrame implements ActionListener {
     	idLabel.setVisible(false);
     	updateLabel.setVisible(false);
     	scrollPane.setVisible(false);
+    	updateDataBtn.setVisible(false);
 		cont.path();
 		cont.sendWords();
 		JOptionPane.showMessageDialog(frame, "کامیابی سے شامل");
@@ -347,6 +383,7 @@ public class AppGui extends JFrame implements ActionListener {
 	    wordTxt.setVisible(false);
 	    updateWordTxt.setVisible(false);
 	    scrollPane.setVisible(false);
+	    updateDataBtn.setVisible(false);
    }
   //Function of generateMutantsBtn
     if (e.getSource() == generateMutantsBtn) {
@@ -365,6 +402,7 @@ public class AppGui extends JFrame implements ActionListener {
         wordTxt.setVisible(false);
         updateWordTxt.setVisible(false);
         scrollPane.setVisible(false);
+        updateDataBtn.setVisible(false);
   }
   //Function of highlightTyposBtn
     if (e.getSource() == highlightTyposBtn) {
@@ -383,6 +421,7 @@ public class AppGui extends JFrame implements ActionListener {
     	 wordTxt.setVisible(false);
     	 updateWordTxt.setVisible(false);
     	 scrollPane.setVisible(false);
+    	 updateDataBtn.setVisible(false);
      }
   //Function of giveSuggestionBtn
     if (e.getSource() == giveSuggestionsBtn) {
@@ -401,9 +440,10 @@ public class AppGui extends JFrame implements ActionListener {
         wordTxt.setVisible(false);
         updateWordTxt.setVisible(false);
         scrollPane.setVisible(false);
+        updateDataBtn.setVisible(false);
      }
     //Function of addWordBtn
-    if (e.getSource() == updateWordBtn) {
+    if (e.getSource() == addNewWordBtn) {
     	txt.setVisible(false);
     	addBtn.setVisible(false);
     	browseBtn.setVisible(false);
@@ -420,6 +460,7 @@ public class AppGui extends JFrame implements ActionListener {
         wordTxt.setVisible(true);
         updateWordTxt.setVisible(true);
         scrollPane.setVisible(true);
+        updateDataBtn.setVisible(true);
         try {
 			addDataIntoJTable();
 		} catch (SQLException e1) {
@@ -446,9 +487,41 @@ public class AppGui extends JFrame implements ActionListener {
         wordTxt.setVisible(false);
         updateWordTxt.setVisible(false);
         scrollPane.setVisible(false);
+        updateDataBtn.setVisible(false);
     	cont.sendmanualWords(manualWordTxt.getText());
     	
      }
+  
+    
+    //Function of updateDataBtn
+    if (e.getSource() == updateDataBtn) {
+    	idTxt.getText();
+    	wordTxt.getText();
+    	updateWordTxt.getText();
+    	txt.setVisible(false);
+    	addBtn.setVisible(false);
+    	browseBtn.setVisible(false);
+    	choiceLabel.setVisible(false);
+        manualWordTxt.setVisible(false);
+        manualAddBtn.setVisible(false);
+        optionLabel1.setVisible(false);
+        optionLabel2.setVisible(false);
+        //table.setVisible(true);
+        idLabel.setVisible(true);
+        wordLabel.setVisible(true);
+        updateLabel.setVisible(true);
+        idTxt.setVisible(true);
+        wordTxt.setVisible(true);
+        updateWordTxt.setVisible(true);
+        scrollPane.setVisible(true);
+        //displayDataBtn.setVisible(true);
+        updateDataBtn.setVisible(true);
+        cont.updateData(idTxt.getText(),wordTxt.getText(),updateWordTxt.getText());
+        updateTable();
+   
+       
+     }
+    
   }
   
 }

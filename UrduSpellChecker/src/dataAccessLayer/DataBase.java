@@ -9,6 +9,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
@@ -234,7 +236,7 @@ public void addManualWord(String string) {
 		      
 		      stmt = con.createStatement();
 		      
-		      if (word.equals(string)) {
+		      if (string.equals(word)) {
 		    	  
 			      
 			        String update = "UPDATE `words` SET `frequency`=  + (frequency  + 1) WHERE 'wid' = + 'wid' + ';' ";
@@ -259,9 +261,114 @@ public void addManualWord(String string) {
   catch(Exception e) {
 	
 	System.out.println(e.getMessage());
-}
+   }
+	 
 	
 }
+
+
+/*
+ * author: Fahad-Bin-Imran 
+ * (20F-0194)
+ * 
+ * Make addDataIntoJTable function to display data in the JTable
+ * */	
+
+
+public void addDataIntoJTable() throws SQLException {
+	  Connection con = null;
+	  Statement stmt = null;
+	  ResultSet rs = null;
+	  ResultSetMetaData rsmd = null;
+	  con = DriverManager.getConnection("jdbc:mysql://localhost:3306/spell_checker", "root", "");
+	  
+		try {
+			
+			System.out.println("Connected");
+			
+			stmt = con.createStatement();
+			
+			String fetch = "SELECT * FROM `words`";
+			rs = stmt.executeQuery(fetch);
+			rsmd  = rs.getMetaData();
+		    JTable jt1 = new JTable();
+			DefaultTableModel model = (DefaultTableModel) jt1.getModel();
+			
+		    int col = rsmd.getColumnCount();
+		    String colName[] = new String[col];
+		    for(int i=0;i<col;i++) {
+		    	colName[i] = rsmd.getColumnName(i+1);
+		    	model.setColumnIdentifiers(colName);
+		    	String wid,word,frequency;
+		    	while (rs.next()) {
+					 
+		            wid = rs.getString(1);
+		            word = rs.getString(2);
+		            frequency = rs.getString(3);
+		            
+		            String[] row = {wid,word,frequency};
+		           
+		            model.addRow(row);
+		            
+		            
+		        }
+		    }
+			
+			
+			rs.close();
+
+			System.out.println("Fetched");
+			
+		}
+		
+		catch(Exception e) {
+			
+			System.out.println(e.getMessage());
+		}
+			
+
+}
+
+
+/*
+ * author: Fahad-Bin-Imran 
+ * (20F-0194)
+ * 
+ * Make updateTableData function to update the JTable Data and DataBase Data
+ * */	
+
+public void updateTableData(String id, String word, String new_Word) {
+	try {
+
+		      System.out.println("Connected");
+		      
+		      stmt = con.createStatement();
+		      
+			      
+			  String update =  "UPDATE words SET word=? WHERE wid=?";
+			  
+			  PreparedStatement pstmt = con.prepareStatement(update);
+			  
+			  String wid = id;
+			  String newWrd = new_Word;
+			  
+			  pstmt.setString(1,newWrd);       
+			  pstmt.setString(2,wid);
+			  
+			  pstmt.executeUpdate();
+		      System.out.println("updated");
+  
+	
+}
+
+catch(Exception e) {
+	
+	System.out.println(e.getMessage());
+}
+	 
+	
+}
+
 
 
 

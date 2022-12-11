@@ -1,5 +1,8 @@
 package presentationLayer;
 import presentationLayer.AppGui;
+
+import java.sql.SQLException;
+
 import  businessLayer.ReadXmlFiles;
 import dataAccessLayer.DataBase;
 
@@ -29,6 +32,14 @@ public void sendWords() {
 
 public void sendmanualWords(String string) {
 	db.addManualWord(string);
+}
+
+public void showDataInTable() throws SQLException {
+	db.addDataIntoJTable();
+}
+
+public void updateData(String id, String word, String new_Word) {
+	db.updateTableData(id,word,new_Word);
 }
 
 
