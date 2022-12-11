@@ -1,9 +1,11 @@
 package testingBusinessLayer;
 import buisnessLayer.Model;
+import businessLayer.ReadXmlFiles;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.File;
+import java.io.Reader;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -12,29 +14,29 @@ class TestBusinessLayer {
 
 	@Test
 	public void perfectFile(){
-		Model model = new Model();
-		File file = new File(path);
-		Assertions.assertTrue(model.readFile(file));
+		ReadXmlFiles model = new ReadXmlFiles();
+		File file = new File("C:\\Users\\Mr Laptop\\Desktop\\demo");
+		Assertions.assertTrue(model.readFile(""));
 	}
 	
 	@Test
 	public void noContent(){
-		Model model = new Model();
-		File file = new File(path);
+		ReadXmlFiles model = new ReadXmlFiles();
+		File file = new File("C:\\Users\\Mr Laptop\\Desktop\\demo");
 		Assertions.assertFalse(model.readFile(file));
 	}
 	
 	@Test
 	public void noTitle(){
-		Model model = new Model();
-		File file = new File(path);
+		ReadXmlFiles model = new ReadXmlFiles();
+		File file = new File("C:\\Users\\Mr Laptop\\Desktop\\demo");
 		Assertions.assertTrue(model.readFile(file));
 	}
 	
 	@Test
 	public void noAuthor(){
-		Model model = new Model();
-		File file = new File(path);
+		ReadXmlFiles model = new ReadXmlFiles();
+		File file = new File("C:\\Users\\Mr Laptop\\Desktop\\demo");
 		Assertions.assertTrue(model.readFile(file));
 	}
 
