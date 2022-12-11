@@ -1,302 +1,114 @@
 // package
-package businessLayer;
+package business_layer;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-/**
+/*
+* Use Case No 1:
+* 
 * Generate Mutants of Each Word Automatically:
 * -> Mutants to cross varify the actual words
 * -> Cat Mutates into Kat
 * -> Site Mutates into Sit
+* 
+* ********************************************
+* 
+* Use Case No 2:
+* 
+* Mutants should be according to Phonetics
+* -> Remove Redundant Mutants
+*-> Mutants should have similar sound
+*-> Shift    ->   Swift      -> Gift
+*
 *
 * @author  Muhammad Saad Javed (20F-0349)
-* @version 1.1
+* @version 1.2
 * @since   2022-12-10 
 */
 
 public class GenerateMutants {
-  public static void main(String[] args) {
-	  
-    String inputString = "";
+	public static void main(String[] args) {
+		
+	    String inputString = "اصل";
 
-    // Create a regular expression that matches the characters you want to replace
-    Pattern pattern = Pattern.compile("[(ے|ی|ھ|ہ|و|ں|ن|م|ل|گ|ک|ق|ف|غ|ع|ظ|ط|ض|ص|ش|س|ژ|ز|ڑ|ر|ذ|ڈ|د|خ|ح|چ|ج|ث|ٹ|ت|پ|ب|آ|ا|ء)]");
-    Matcher matcher = pattern.matcher(inputString);
+	    // Create a regular expression that matches the characters you want to replace
+	    Pattern pattern = Pattern.compile("[(ے|ی|ھ|ہ|و|ں|ن|م|ل|گ|ک|ق|ف|غ|ع|ظ|ط|ض|ص|ش|س|ژ|ز|ڑ|ر|ذ|ڈ|د|خ|ح|چ|ج|ث|ٹ|ت|پ|ب|آ|ا|ء)]");
+	    Matcher matcher = pattern.matcher(inputString);
 
-    // Use a StringBuilder to store the resulting text
-    StringBuilder result = new StringBuilder();
+	    // Use a Set to store the unique mutants
+	    Set<String> mutants = new HashSet<>();
 
-    // Loop through all the matches and replace them with the corresponding character
-    while (matcher.find()) {
-      String character = matcher.group();
-      switch (character) {
-      case "ک":
-        matcher.appendReplacement(result, "ق");
-        break;
-      case "ق":
-        matcher.appendReplacement(result, "ک");
-        break;
-      case "ث":
-        // Replace "ث" with "ص"
-        result.setLength(0);
-        result.append("ص");
-        result.append(inputString.substring(matcher.end()));
-        System.out.println(result);
+	    // Loop through all the matches and replace them with the corresponding character
+	    while (matcher.find()) {
+	        String character = matcher.group();
+	        // Use a regular expression to match the character and replace it with the corresponding character
 
-        // Replace "ث" with "ش"
-        result.setLength(0);
-        result.append("ش");
-        result.append(inputString.substring(matcher.end()));
-        System.out.println(result);
+	        // Generate mutants and add them to the Set
+	        mutants.add(inputString.replaceAll("ق", "ک"));
+	        mutants.add(inputString.replaceAll("ک", "ق"));
+	        
+	        mutants.add(inputString.replaceAll("ص", "ث"));
+	        mutants.add(inputString.replaceAll("ش", "ث"));
+	        mutants.add(inputString.replaceAll("س", "ث"));
+	        mutants.add(inputString.replaceAll("ث", "ص"));
+	        mutants.add(inputString.replaceAll("ش", "ص"));
+	        mutants.add(inputString.replaceAll("س", "ص"));
+	        mutants.add(inputString.replaceAll("ث", "ش"));
+	        mutants.add(inputString.replaceAll("ص", "ش"));
+	        mutants.add(inputString.replaceAll("س", "ش"));
+	        mutants.add(inputString.replaceAll("ث", "س"));
+	        mutants.add(inputString.replaceAll("ص", "س"));
+	        mutants.add(inputString.replaceAll("ش", "س"));
+	        
+	        mutants.add(inputString.replaceAll("ظ", "ض"));
+	        mutants.add(inputString.replaceAll("ذ", "ض"));
+	        mutants.add(inputString.replaceAll("ز", "ض"));
+	        mutants.add(inputString.replaceAll("ض", "ظ"));
+	        mutants.add(inputString.replaceAll("ذ", "ظ"));
+	        mutants.add(inputString.replaceAll("ز", "ظ"));
+	        mutants.add(inputString.replaceAll("ض", "ذ"));
+	        mutants.add(inputString.replaceAll("ظ", "ذ"));
+	        mutants.add(inputString.replaceAll("ز", "ذ"));
+	        mutants.add(inputString.replaceAll("ض", "ز"));
+	        mutants.add(inputString.replaceAll("ظ", "ز"));
+	        mutants.add(inputString.replaceAll("ذ", "ز"));
+	        
+	        mutants.add(inputString.replaceAll("د", "ڈ"));
+	        mutants.add(inputString.replaceAll("ڈ", "د"));
+	        
+	        mutants.add(inputString.replaceAll("ٹ", "ط"));
+	        mutants.add(inputString.replaceAll("ت", "ط"));
+	        mutants.add(inputString.replaceAll("ط", "ٹ"));
+	        mutants.add(inputString.replaceAll("ت", "ٹ"));
+	        mutants.add(inputString.replaceAll("ط", "ت"));
+	        mutants.add(inputString.replaceAll("ٹ", "ت"));
+	        
+	        mutants.add(inputString.replaceAll("ہ", "ھ"));
+	        mutants.add(inputString.replaceAll("ح", "ھ"));
+	        mutants.add(inputString.replaceAll("ھ", "ہ"));
+	        mutants.add(inputString.replaceAll("ح", "ہ"));
+	        mutants.add(inputString.replaceAll("ھ", "ح"));
+	        mutants.add(inputString.replaceAll("ہ", "ح"));
+	        
+	        mutants.add(inputString.replaceAll("ن", "ں"));
+	        mutants.add(inputString.replaceAll("ں", "ن"));
+	        
+	        mutants.add(inputString.replaceAll("ر", "ڑ"));
+	        mutants.add(inputString.replaceAll("ڑ", "ر"));
+	        
+	        mutants.add(inputString.replaceAll("ع", "ا"));
+	        mutants.add(inputString.replaceAll("ا", "ع"));
+	        
+	        mutants.add(inputString.replaceAll("خا", "کھا"));
+	    }
 
-        // Replace "ث" with "س"
-        result.setLength(0);
-        result.append("س");
-        result.append(inputString.substring(matcher.end()));
-        System.out.println(result);
-        break;
-      case "ص":
-        // Replace "ص" with "ث"
-        result.setLength(0);
-        result.append("ث");
-        result.append(inputString.substring(matcher.end()));
-        System.out.println(result);
+	    // Print the unique mutants
+	    for (String mutant : mutants) {
+	        System.out.println(mutant);
+	    }
+	}
 
-        // Replace "ص" with "ش"
-        result.setLength(0);
-        result.append("ش");
-        result.append(inputString.substring(matcher.end()));
-        System.out.println(result);
-
-        // Replace "ص" with "س"
-        result.setLength(0);
-        result.append("س");
-        result.append(inputString.substring(matcher.end()));
-        System.out.println(result);
-        break;
-      case "ش":
-        // Replace "ش" with "ث"
-        result.setLength(0);
-        result.append("ث");
-        result.append(inputString.substring(matcher.end()));
-        System.out.println(result);
-
-        // Replace "ش" with "ص"
-        result.setLength(0);
-        result.append("ص");
-        result.append(inputString.substring(matcher.end()));
-        System.out.println(result);
-
-        // Replace "ش" with "س"
-        result.setLength(0);
-        result.append("س");
-        result.append(inputString.substring(matcher.end()));
-        System.out.println(result);
-        break;
-      case "س":
-        // Replace "س" with "ث"
-        result.setLength(0);
-        result.append("ث");
-        result.append(inputString.substring(matcher.end()));
-        System.out.println(result);
-
-        // Replace "س" with "ص"
-        result.setLength(0);
-        result.append("ص");
-        result.append(inputString.substring(matcher.end()));
-        System.out.println(result);
-
-        // Replace "س" with "ش"
-        result.setLength(0);
-        result.append("ش");
-        result.append(inputString.substring(matcher.end()));
-        System.out.println(result);
-        break;
-      case "ض":
-        // Replace "ض" with "ظ"
-        result.setLength(0);
-        result.append("ظ");
-        result.append(inputString.substring(matcher.end()));
-        System.out.println(result);
-
-        // Replace "ض" with "ذ"
-        result.setLength(0);
-        result.append("ذ");
-        result.append(inputString.substring(matcher.end()));
-        System.out.println(result);
-
-        // Replace "ض" with "ز"
-        result.setLength(0);
-        result.append("ز");
-        result.append(inputString.substring(matcher.end()));
-        System.out.println(result);
-        break;
-      case "ظ":
-        // Replace "ظ" with "ض"
-        result.setLength(0);
-        result.append("ض");
-        result.append(inputString.substring(matcher.end()));
-        System.out.println(result);
-
-        // Replace "ظ" with "ذ"
-        result.setLength(0);
-        result.append("ذ");
-        result.append(inputString.substring(matcher.end()));
-        System.out.println(result);
-
-        // Replace "ظ" with "ز"
-        result.setLength(0);
-        result.append("ز");
-        result.append(inputString.substring(matcher.end()));
-        System.out.println(result);
-        break;
-      case "ذ":
-        // Replace "ذ" with "ض"
-        result.setLength(0);
-        result.append("ض");
-        result.append(inputString.substring(matcher.end()));
-        System.out.println(result);
-
-        // Replace "ذ" with "ظ"
-        result.setLength(0);
-        result.append("ظ");
-        result.append(inputString.substring(matcher.end()));
-        System.out.println(result);
-
-        // Replace "ذ" with "ز"
-        result.setLength(0);
-        result.append("ز");
-        result.append(inputString.substring(matcher.end()));
-        System.out.println(result);
-        break;
-      case "ز":
-        // Replace "ز" with "ض"
-        result.setLength(0);
-        result.append("ض");
-        result.append(inputString.substring(matcher.end()));
-        System.out.println(result);
-
-        // Replace "ز" with "ظ"
-        result.setLength(0);
-        result.append("ظ");
-        result.append(inputString.substring(matcher.end()));
-        System.out.println(result);
-
-        // Replace "ز" with "ذ"
-        result.setLength(0);
-        result.append("ذ");
-        result.append(inputString.substring(matcher.end()));
-        System.out.println(result);
-        break;
-      case "ڈ":
-        matcher.appendReplacement(result, "د");
-        break;
-      case "د":
-        matcher.appendReplacement(result, "ڈ");
-        break;
-      case "ط":
-        // Replace "ط" with "ٹ"
-        result.setLength(0);
-        result.append("ٹ");
-        result.append(inputString.substring(matcher.end()));
-        System.out.println(result);
-
-        // Replace "ط" with "ت"
-        result.setLength(0);
-        result.append("ت");
-        result.append(inputString.substring(matcher.end()));
-        System.out.println(result);
-        break;
-      case "ٹ":
-        // Replace "ٹ" with "ط"
-        result.setLength(0);
-        result.append("ط");
-        result.append(inputString.substring(matcher.end()));
-        System.out.println(result);
-
-        // Replace "ٹ" with "ت"
-        result.setLength(0);
-        result.append("ت");
-        result.append(inputString.substring(matcher.end()));
-        System.out.println(result);
-        break;
-      case "ت":
-        // Replace "ت" with "ط"
-        result.setLength(0);
-        result.append("ط");
-        result.append(inputString.substring(matcher.end()));
-        System.out.println(result);
-
-        // Replace "ت" with "ٹ"
-        result.setLength(0);
-        result.append("ٹ");
-        result.append(inputString.substring(matcher.end()));
-        System.out.println(result);
-        break;
-      case "ھ":
-        // Replace "ھ" with "ہ"
-        result.setLength(0);
-        result.append("ہ");
-        result.append(inputString.substring(matcher.end()));
-        System.out.println(result);
-
-        // Replace "ھ" with "ح"
-        result.setLength(0);
-        result.append("ح");
-        result.append(inputString.substring(matcher.end()));
-        System.out.println(result);
-        break;
-      case "ہ":
-        // Replace "ہ" with "ھ"
-        result.setLength(0);
-        result.append("ھ");
-        result.append(inputString.substring(matcher.end()));
-        System.out.println(result);
-
-        // Replace "ہ" with "ح"
-        result.setLength(0);
-        result.append("ح");
-        result.append(inputString.substring(matcher.end()));
-        System.out.println(result);
-        break;
-      case "ح":
-        // Replace "ح" with "ھ"
-        result.setLength(0);
-        result.append("ھ");
-        result.append(inputString.substring(matcher.end()));
-        System.out.println(result);
-
-        // Replace "ح" with "ہ"
-        result.setLength(0);
-        result.append("ہ");
-        result.append(inputString.substring(matcher.end()));
-        System.out.println(result);
-        break;
-      case "ں":
-        matcher.appendReplacement(result, "ن");
-        break;
-      case "ن":
-        matcher.appendReplacement(result, "ں");
-        break;
-      case "ڑ":
-        matcher.appendReplacement(result, "ر");
-        break;
-      case "ر":
-        matcher.appendReplacement(result, "ڑ");
-        break;
-      case "ا":
-        matcher.appendReplacement(result, "ع");
-        break;
-      case "ع":
-        matcher.appendReplacement(result, "ا");
-        break;
-      }
-    }
-
-    // Append the remaining text to the result
-    matcher.appendTail(result);
-
-    System.out.println(result); // Outputs
-  }
 }
