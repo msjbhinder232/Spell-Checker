@@ -1,4 +1,4 @@
-package Presentation_Layer;
+package presentationLayer;
 
 import java.awt.*; // Using AWT layouts
 import java.awt.event.*; // Using AWT event classes and listener interfaces
@@ -16,13 +16,13 @@ import javax.swing.*; // Using Swing components and containers
  */
 
 //Creating the GUI
-class View extends JFrame implements ActionListener {
+class GUI extends JFrame implements ActionListener {
 
   public JTextArea inputTextArea, outputTextArea; // Declare a TextArea component
   public JButton importDataBtn, generateMutantsBtn, highlightTyposBtn, giveSuggestionsBtn, clearBtn;
   public JLabel inputLabel, outputLabel; // Declare a Label component
 
-  public View() {
+  public GUI() {
 
     JPanel mainPanel = new JPanel();
 
@@ -109,6 +109,6 @@ class View extends JFrame implements ActionListener {
   }
 
   public static void main(String[] args) {
-    new View();
+    new GUI();
   }
 }
