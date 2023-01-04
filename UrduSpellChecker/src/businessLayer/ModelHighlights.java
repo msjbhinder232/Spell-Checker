@@ -21,9 +21,9 @@ public class Model {
 
 	}
 
-	public ArrayList<String> check(ArrayList<String> List, String[] words) {
+public ArrayList<String> check(ArrayList<String> List, String[] words) {
 		ArrayList<String> wrongWord = new ArrayList<String>();
-		boolean flag=false;
+		boolean flag=true;
 		for (int i = 0; i < words.length; i++) {
 			String word = words[i];
 			flag=false;
@@ -38,6 +38,7 @@ public class Model {
 			}
 		}
 		return wrongWord;
+
 
 	}
 
