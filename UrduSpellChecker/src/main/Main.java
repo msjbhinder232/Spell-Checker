@@ -12,8 +12,7 @@ public class MainHighlight {
      * here is code of highlights usecase main class
      * */
 	public static void main(String[] args) {
-		//DesignPatternHighlight searchBar = new DesignPatternHighlight();
-      
+		
 		DesignPatternHighlight v = new DesignPatternHighlight();
 		  v.sujList.setVisible(false);
 	        
