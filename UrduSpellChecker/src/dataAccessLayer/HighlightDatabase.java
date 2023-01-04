@@ -1,4 +1,4 @@
-package data;
+package DataaccessLayer;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -6,33 +6,47 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
 
- /*
-     * author: Muhammad Atif Siddique
-     * (20F-0106)
-     * 
-     * here is code of database connectivity or store word in string to match
-     * */
-public class database {
+
+public class Highlightdatabase {
 	Statement stat;
-
-	public void createConnection() {
-		try {
-			Class.forName("com.mysql.cj.jdbc.Driver");
-			Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/DataBaseNameHere", "root","");
-			stat = con.createStatement();
-		} catch (Exception e) {
-			e.printStackTrace();
-			System.out.println("connection failed");
-		}
+	ArrayList<String> wordList;
+	
+	public Highlightdatabase()
+	{
+		wordList = new ArrayList<String>();
 	}
-
-		public ArrayList<String> getWord() {
-			/*
-			 * for(int i=0;i<wordList.size();i++) { System.out.println(wordList.get(i)); }
-			 */
-			return wordList;
+	  public void createConnection() { 
+		  /*
+		     * author: Muhammad Atif Siddique
+		     * (20F-0106)
+		     * 
+		     * here is code of highlights usecase Highlightdatabase management
+		     * */
+			try {
+				// Establishing a connection to the Highlightdatabase
+				Class.forName("com.mysql.cj.jdbc.Driver");
+				Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/data","root","");
+				
+				// Get the wordList from the Highlightdatabase
+				String query = "SELECT DISTINCT * FROM word";
+				Statement stat = con.createStatement();
+				ResultSet rs = stat.executeQuery(query);
+				while (rs.next()) {
+					wordList.add(rs.getString("word"));
+				}
+			
+				con.close();
+			} 
+			catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
-
+		
+	
+	 
+	public ArrayList<String> getWord() {
+		
+		return wordList;
 	}
 
 }
