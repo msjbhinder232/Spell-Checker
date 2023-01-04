@@ -33,7 +33,29 @@ public class DesignControl {
 
 		});
 	}
+	public void getSuggestions(String lineWrong) {
+		ArrayList<String> suggestions = new ArrayList<String>();
 
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/data", "root", "");
+			String sql = "SELECT word.word FROM word INNER JOIN mutant ON mutant.word='" + lineWrong
+					+ "' AND mutant.id=word.id";
+			PreparedStatement pst = con.prepareStatement(sql);
+			ResultSet rs = pst.executeQuery();
+			if (rs.next()) {
+				do {
+				String	sug = rs.getString("Word.word");
+               System.out.println(sug);
+					suggestions.add(rs.getString("Word.word"));
+				} while (rs.next());
+			}
+			con.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+	}
 	private void actionOnButton(String line) {
 		List=model.getWord();
 		if(List==null) {
