@@ -18,7 +18,14 @@ public class DesignPatternHighlight extends JFrame {
 	private JPanel contentPane;
 	JButton Result_btn;
 	JTextArea Text1;
-	//String closestWord;
+	JLabel lblNewLabel ;
+	public JLabel getLblNewLabel() {
+		return lblNewLabel;
+	}
+	public void setLblNewLabel(JLabel lblNewLabel) {
+		this.lblNewLabel = lblNewLabel;
+	}
+
 	int minDistance;
    
 	
@@ -29,36 +36,14 @@ public class DesignPatternHighlight extends JFrame {
 		this.minDistance = minDistance;
 	}
 
-
-	//String[] items = {"Apple", "Mango", "Orange", "Banana", "Grapes"};
-	 /*
-     * author: Muhammad Atif Siddique
-     * (20F-0106)
-     * 
-     * here is code of highlights of Designing the GUI
-     * */
 	 JTextArea result1;
 	private JTable table;
 	private JScrollPane scrollpane;
 	private JScrollPane scrollpane_1;
 	private DefaultTableModel defaultmodel;
-	
-	
-//	private JTextField searchField;
+
     public JList sujList;
-    //private JScrollPane scrollPane;
-//    private String[] suj = {
-//            "POP",
-//            "POPY",
-//            "ALLAH",
-//            "POPA",
-//            "MUHAMMAD"
-//    };
-    //private JTextField textField;
-	
-	
-	
-	 //JComboBox myComboBox ;
+
 	public DesignPatternHighlight() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 596, 584);
@@ -133,24 +118,25 @@ public class DesignPatternHighlight extends JFrame {
         
         // create the list
         sujList = new JList();
-        sujList.setBounds(303, 157, 134, 213);
+        sujList.setBounds(303, 185, 134, 213);
         contentPane.add(sujList);
         sujList.setVisibleRowCount(20);
         sujList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        
+          lblNewLabel = new JLabel("");
+          lblNewLabel.setBackground(Color.WHITE);
+        lblNewLabel.setBounds(302, 153, 135, 31);
+        contentPane.add(lblNewLabel);
         
     
         sujList.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e )
             {
             	Text1.replaceSelection(sujList.getSelectedValue().toString());
-//            	Text1.setText(sujList.getSelectedValue().toString());
-            
+
             } 
         });
-        
-
-        // set the size and display the window
-        setSize(734, 422);
+         setSize(734, 422);
        setVisible(true);
          
     
@@ -161,11 +147,7 @@ public class DesignPatternHighlight extends JFrame {
 	public JList getTextArea_2() {
 		return sujList;
 	}
-	//public void 
-//
-//	public void setTextArea_2(JTextArea textArea_2) {
-//		this.sujList = textArea_2;
-//	}
+
 	public JButton getBtnNewButton() {
 		return Result_btn;
 	}

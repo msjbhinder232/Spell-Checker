@@ -1,20 +1,27 @@
-package lab5;
+package PresentationLayer;
 
-import Logic.Model;
+import javax.swing.JFrame;
 
-public class DesignMain {
- /*
+import LogicLayer.ModelHighlights;
+
+public class MainHighlight {
+	 /*
      * author: Muhammad Atif Siddique
      * (20F-0106)
      * 
-     * here is main of highlights of class controller
+     * here is code of highlights usecase main class
      * */
 	public static void main(String[] args) {
-		DesignPattern v = new DesignPattern();
+		
+		DesignPatternHighlight v = new DesignPatternHighlight();
+		  v.sujList.setVisible(false);
+	        
+	        v.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		v.setVisible(true);
-		Model m = new Model();
-		DesignControl c = new DesignControl(m, v);
+		ModelHighlights m = new ModelHighlights();
+		HighlightDesignControl c = new HighlightDesignControl(m, v);
 		c.getStartController();
+c.displayClosestWord();
 	}
 
 }

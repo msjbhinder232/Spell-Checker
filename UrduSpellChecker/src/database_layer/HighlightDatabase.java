@@ -28,7 +28,7 @@ public class Highlightdatabase {
 				Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/data","root","");
 				
 				// Get the wordList from the Highlightdatabase
-				String query = "SELECT DISTINCT * FROM word";
+				String query = "SELECT DISTINCT * FROM words";
 				Statement stat = con.createStatement();
 				ResultSet rs = stat.executeQuery(query);
 				while (rs.next()) {

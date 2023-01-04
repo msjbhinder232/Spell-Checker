@@ -1,5 +1,9 @@
 package LogicLayer;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -78,9 +82,7 @@ public class ModelHighlights {
 		        for (int i = 0; i < array.length; i++) {
 		            array[i] = "String " + (i + 1);
 		        }
-		        
-		        
-		        
+		     
 				closestWord = word;
 			}
 		}

@@ -92,29 +92,38 @@ public class HighlightDesignControl {
 		}
 		
 	};
-	public void getSuggestions(String lineWrong) {
-		ArrayList<String> suggestions = new ArrayList<String>();
 
-		try {
-			Class.forName("com.mysql.cj.jdbc.Driver");
-			Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/data", "root", "");
-			String sql = "SELECT word.word FROM word INNER JOIN mutant ON mutant.word='" + lineWrong
-					+ "' AND mutant.id=word.id";
-			PreparedStatement pst = con.prepareStatement(sql);
-			ResultSet rs = pst.executeQuery();
-			if (rs.next()) {
-				do {
-				String	sug = rs.getString("Word.word");
-               System.out.println(sug);
-					suggestions.add(rs.getString("Word.word"));
-				} while (rs.next());
+		public String getSuggestions(String lineWrong) {
+			ArrayList<String> suggestions = new ArrayList<String>();
+			String	sug=null;
+			try {
+				Class.forName("com.mysql.cj.jdbc.Driver");
+				Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/data", "root", "");
+				String sql ;
+//				String sql = "SELECT words.word FROM words INNER JOIN generatemutant ON generatemutant.word='" + lineWrong
+//						+ "' AND generatemutant.id=words.wid";
+//				lineWrong=	"ماہرین";
+				sql="select * from words where wid in (select id from generatemutant where word = '" + lineWrong +"');";
+				PreparedStatement pst = con.prepareStatement(sql);
+				ResultSet rs = pst.executeQuery();
+				if (rs.next()) {
+					do {
+					 	sug = rs.getString("word");
+		               System.out.println(sug);
+		               System.out.println("working");
+		               
+						suggestions.add(rs.getString("word"));
+					} while (rs.next());
+				}
+				view.getLblNewLabel().setText(sug);
+				con.close();
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
-			con.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+			return sug;
 
-	}
+		}
+	//////////////////////////
 	private void inputInTextField(String text) {
 		
 		List = ModelHighlights.getWord();
