@@ -1,38 +1,101 @@
-package lab5;
+package PresentationLayer;
 
 import java.awt.Color;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.ArrayList;
 
+import javax.swing.JTextField;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultHighlighter;
 import javax.swing.text.Highlighter;
 import javax.swing.text.Highlighter.HighlightPainter;
 
-import Logic.Model;
- /*
-     * author: Muhammad Atif Siddique
-     * (20F-0106)
-     * 
-     * here is code of highlights of class controller
-     * */
-public class DesignControl {
-	Model model;
-	DesignPattern view;
-	ArrayList<String> List=new ArrayList<String>();
-	
-	
-	public DesignControl(Model m, DesignPattern v) {
-		model = m;
+import LogicLayer.ModelHighlights;
+
+public class HighlightDesignControl {
+	ModelHighlights ModelHighlights;
+	DesignPatternHighlight view;
+	ArrayList<String> List = new ArrayList<String>();
+	String wrongWords2;
+
+    public void displayClosestWord() {
+        String closestWord = ModelHighlights.getClosestWord();
+        String inputWord = ModelHighlights.getInputWord();
+        view.displayClosestWord(closestWord, inputWord);
+    }
+	/*
+	 * author: Muhammad Atif Siddique (20F-0106)
+	 * 
+	 * here is class of highlights usecase controller
+	 */
+	public HighlightDesignControl(ModelHighlights m, DesignPatternHighlight v) {
+		ModelHighlights = m;
 		view = v;
+		
 	}
 
 	public void getStartController() {
 		view.getBtnNewButton().addActionListener(e -> {
-			String line=view.getTextArea().getText();
-			actionOnButton(line);
+			String inputWord = view.getTextArea().getText();
+			actionOnButton(inputWord);
+			
 
 		});
-	}
+		
+		// Text1 = new JTextField(20);
+		view.getTextArea_1().addKeyListener(new KeyAdapter() {
+			public void keyReleased(KeyEvent e) {
+
+				String text = view.getTextArea_1().getText();
+				inputInTextField(text);
+			}
+		});
+	};
+
+	public void actionOnButton(String inputWord) {
+		
+		List = ModelHighlights.getWord();
+		inputWord += "";
+		String[] w = inputWord.split(" ");
+		String lineWrong = "";
+		
+		ArrayList<String> wrongWords = ModelHighlights.check(List, w);
+		wrongWords2=	ModelHighlights.editDis(inputWord);
+		
+		for (int i = 0; i < wrongWords.size(); i++) {
+			String string = wrongWords.get(i);
+			
+//			if (i == wrongWords.size() - 1) {
+//				lineWrong += string;
+//			} else {
+//				lineWrong += string + " ";
+//			}
+			lineWrong += string + " ";
+			getSuggestions(lineWrong);
+		}
+		
+		//lineWrong.strip();
+		
+		view.getTextArea_1().setText(lineWrong);
+		
+		Highlighter highLight = view.getTextArea_1().getHighlighter();
+		highLight.removeAllHighlights();
+	
+		HighlightPainter y = new DefaultHighlighter.DefaultHighlightPainter(Color.red);
+		try {
+			highLight.addHighlight(0, lineWrong.length(), y);
+			
+		} catch (BadLocationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	};
 	public void getSuggestions(String lineWrong) {
 		ArrayList<String> suggestions = new ArrayList<String>();
 
@@ -56,30 +119,33 @@ public class DesignControl {
 		}
 
 	}
-	private void actionOnButton(String line) {
-		List=model.getWord();
-		if(List==null) {
-			System.out.println("ڈیٹا بیس سے الفاظ کی فہرست خالی ہے۔");
+	private void inputInTextField(String text) {
+		// create the list
+		// sujList = new JList(List);
+		// view.setTextArea3();
+		List = ModelHighlights.getWord();
+		if (text.isEmpty()) {
+			view.setTextArea3().setVisible(false);
+		} else {
+			view.setTextArea3().setVisible(true);
 		}
-		line+=" ";
-		String [] w=line.split(" ");
-		String lineWrong="";
-		ArrayList<String> wrongWords=model.check(List,w);
-		for (int i = 0; i < wrongWords.size(); i++) {
-			String string = wrongWords.get(i);
-			lineWrong+=string+" ";
-			
+		ArrayList<String> filteredsuj = new ArrayList<>();
+		for (String sugg : List) {
+			if (sugg.toLowerCase().contains(text.toLowerCase()) && !filteredsuj.contains(sugg)) {
+				  filteredsuj.add(sugg);
+				}
+
+			//if (sugg.toLowerCase().contains(text.toLowerCase())) {
+			//	filteredsuj.add(sugg);
+		//	}
 		}
-		view.getTextArea_1().setText(lineWrong);
-		Highlighter highLight = view.getTextArea_1().getHighlighter();
-		highLight.removeAllHighlights();
-		HighlightPainter y = new DefaultHighlighter.DefaultHighlightPainter(Color.red);
-		try {
-			highLight.addHighlight(0,lineWrong.length() , y);
-		} catch (BadLocationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
+		String[] filteredsujArray = filteredsuj.toArray(new String[filteredsuj.size()+1]);
+		
+		filteredsujArray[filteredsuj.size()]=wrongWords2;
+		view.setTextArea3().setListData(filteredsujArray);
+		
+		
+
+	};
 
 }
