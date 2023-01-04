@@ -1,11 +1,14 @@
-package businessLayer;
+package business_layer;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class GenerateMutants {
+
+  private static final Logger LOGGER = Logger.getLogger(GenerateMutants.class.getName());
 
   private static String inputString;
 
@@ -15,6 +18,7 @@ public class GenerateMutants {
   }
 
   public String implementGenerateMutants() {
+
     // Create a regular expression that matches the characters you want to replace
     Pattern pattern = Pattern.compile("[(ے|ی|ھ|ہ|و|ں|ن|م|ل|گ|ک|ق|ف|غ|ع|ظ|ط|ض|ص|ش|س|ژ|ز|ڑ|ر|ذ|ڈ|د|خ|ح|چ|ج|ث|ٹ|ت|پ|ب|آ|ا|ء)]");
     Matcher matcher = pattern.matcher(inputString);
@@ -103,6 +107,9 @@ public class GenerateMutants {
     mutants.add(inputString.replaceAll("ٹھ", "تھ"));
     mutants.add(inputString.replaceAll("دھ", "ڈھ"));
     mutants.add(inputString.replaceAll("ڈھ", "دھ"));
-    
+
+    // Log the number of mutants generated
+    LOGGER.info("Number of mutants generated: " + mutants.size());
+
   }
 }
