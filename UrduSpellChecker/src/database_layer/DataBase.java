@@ -329,6 +329,41 @@ public void addDataIntoJTable() throws SQLException {
 
 }
 
+public String joinTable(){
+	
+	
+
+	try {
+		
+		System.out.println("Connected");
+		
+		stmt = con.createStatement();
+		
+		String fetch = "SELECT * FROM `content`";
+		rs = stmt.executeQuery(fetch);
+		
+		while (rs.next()) {
+			 
+            content = rs.getString("paragraph");
+            //System.out.println(content);
+        }
+		
+		rs.close();
+
+		System.out.println("Fetched");
+		
+	}
+	
+	catch(Exception e) {
+		
+		System.out.println(e.getMessage());
+	}
+	return content;
+		
+	
+}
+
+
 
 /*
  * author: Fahad-Bin-Imran 
