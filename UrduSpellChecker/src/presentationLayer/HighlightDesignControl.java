@@ -70,11 +70,7 @@ public class HighlightDesignControl {
 		for (int i = 0; i < wrongWords.size(); i++) {
 			String string = wrongWords.get(i);
 			
-//			if (i == wrongWords.size() - 1) {
-//				lineWrong += string;
-//			} else {
-//				lineWrong += string + " ";
-//			}
+	
 			lineWrong += string + " ";
 			getSuggestions(lineWrong);
 		}
@@ -120,9 +116,7 @@ public class HighlightDesignControl {
 
 	}
 	private void inputInTextField(String text) {
-		// create the list
-		// sujList = new JList(List);
-		// view.setTextArea3();
+		
 		List = ModelHighlights.getWord();
 		if (text.isEmpty()) {
 			view.setTextArea3().setVisible(false);
@@ -135,9 +129,6 @@ public class HighlightDesignControl {
 				  filteredsuj.add(sugg);
 				}
 
-			//if (sugg.toLowerCase().contains(text.toLowerCase())) {
-			//	filteredsuj.add(sugg);
-		//	}
 		}
 		String[] filteredsujArray = filteredsuj.toArray(new String[filteredsuj.size()+1]);
 		
