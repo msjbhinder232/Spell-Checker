@@ -70,7 +70,28 @@ public class DesignPatternHighlight extends JFrame {
 		welcome.setFont(new Font("Serif", Font.BOLD | Font.ITALIC, 29));
 		welcome.setBounds(115, 22, 350, 30);
 		contentPane.add(welcome);
-		
+		 // create the list
+        sujList = new JList();
+        sujList.setBounds(303, 157, 134, 213);
+        contentPane.add(sujList);
+        sujList.setVisibleRowCount(20);
+        sujList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        
+    
+        sujList.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e )
+            {
+            	Text1.replaceSelection(sujList.getSelectedValue().toString());
+//            	Text1.setText(sujList.getSelectedValue().toString());
+            
+            } 
+        });
+        
+
+        // set the size and display the window
+        setSize(734, 422);
+       setVisible(true);
+         
 		table = new JTable();
 		table.setBorder(new LineBorder(new Color(0, 0, 0), 2));
 		table.setBackground(new Color(192, 192, 192));
