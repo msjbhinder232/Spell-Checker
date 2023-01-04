@@ -25,13 +25,13 @@ public class database {
 			System.out.println("connection failed");
 		}
 	}
-	public ArrayList<String> getWord() {
 
-		ArrayList<String> wordList = new ArrayList<String>();
-		wordList.add("Hi");
-		
-		return wordList;
-	
+		public ArrayList<String> getWord() {
+			/*
+			 * for(int i=0;i<wordList.size();i++) { System.out.println(wordList.get(i)); }
+			 */
+			return wordList;
+		}
 
 	}
 
