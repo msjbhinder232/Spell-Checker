@@ -1,151 +1,203 @@
 package PresentationLayer;
 
-import java.awt.Color;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import java.awt.*;
+import java.awt.event.*;
 import java.util.ArrayList;
 
-import javax.swing.JTextField;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.DefaultHighlighter;
-import javax.swing.text.Highlighter;
-import javax.swing.text.Highlighter.HighlightPainter;
+import javax.swing.*;
+ 
+import java.awt.Color;
+import java.awt.Font;
 
-import LogicLayer.ModelHighlights;
+import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.border.LineBorder;
 
-public class HighlightDesignControl {
-	ModelHighlights ModelHighlights;
-	DesignPatternHighlight view;
-	ArrayList<String> List = new ArrayList<String>();
-	String wrongWords2;
+public class DesignPatternHighlight extends JFrame {
 
-    public void displayClosestWord() {
-        String closestWord = ModelHighlights.getClosestWord();
-        String inputWord = ModelHighlights.getInputWord();
-        view.displayClosestWord(closestWord, inputWord);
-    }
-	/*
-	 * author: Muhammad Atif Siddique (20F-0106)
-	 * 
-	 * here is class of highlights usecase controller
-	 */
-	public HighlightDesignControl(ModelHighlights m, DesignPatternHighlight v) {
-		ModelHighlights = m;
-		view = v;
-		
-	}
-
-	public void getStartController() {
-		view.getBtnNewButton().addActionListener(e -> {
-			String inputWord = view.getTextArea().getText();
-			actionOnButton(inputWord);
-			
-
-		});
-		
-		// Text1 = new JTextField(20);
-		view.getTextArea_1().addKeyListener(new KeyAdapter() {
-			public void keyReleased(KeyEvent e) {
-
-				String text = view.getTextArea_1().getText();
-				inputInTextField(text);
-			}
-		});
-	};
-
-	public void actionOnButton(String inputWord) {
-		
-		List = ModelHighlights.getWord();
-		inputWord += "";
-		String[] w = inputWord.split(" ");
-		String lineWrong = "";
-		
-		ArrayList<String> wrongWords = ModelHighlights.check(List, w);
-		wrongWords2=	ModelHighlights.editDis(inputWord);
-		
-		for (int i = 0; i < wrongWords.size(); i++) {
-			String string = wrongWords.get(i);
-			
-//			if (i == wrongWords.size() - 1) {
-//				lineWrong += string;
-//			} else {
-//				lineWrong += string + " ";
-//			}
-			lineWrong += string + " ";
-			getSuggestions(lineWrong);
-		}
-		
-		//lineWrong.strip();
-		
-		view.getTextArea_1().setText(lineWrong);
-		
-		Highlighter highLight = view.getTextArea_1().getHighlighter();
-		highLight.removeAllHighlights();
+	private JPanel contentPane;
+	JButton Result_btn;
+	JTextArea Text1;
+	//String closestWord;
+	int minDistance;
+   
 	
-		HighlightPainter y = new DefaultHighlighter.DefaultHighlightPainter(Color.red);
-		try {
-			highLight.addHighlight(0, lineWrong.length(), y);
-			
-		} catch (BadLocationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-	};
-	public void getSuggestions(String lineWrong) {
-		ArrayList<String> suggestions = new ArrayList<String>();
-
-		try {
-			Class.forName("com.mysql.cj.jdbc.Driver");
-			Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/data", "root", "");
-			String sql = "SELECT word.word FROM word INNER JOIN mutant ON mutant.word='" + lineWrong
-					+ "' AND mutant.id=word.id";
-			PreparedStatement pst = con.prepareStatement(sql);
-			ResultSet rs = pst.executeQuery();
-			if (rs.next()) {
-				do {
-				String	sug = rs.getString("Word.word");
-               System.out.println(sug);
-					suggestions.add(rs.getString("Word.word"));
-				} while (rs.next());
-			}
-			con.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
+	public int getMinDistance() {
+		return minDistance;
 	}
-	private void inputInTextField(String text) {
-		// create the list
-		// sujList = new JList(List);
-		// view.setTextArea3();
-		List = ModelHighlights.getWord();
-		if (text.isEmpty()) {
-			view.setTextArea3().setVisible(false);
-		} else {
-			view.setTextArea3().setVisible(true);
-		}
-		ArrayList<String> filteredsuj = new ArrayList<>();
-		for (String sugg : List) {
-			if (sugg.toLowerCase().contains(text.toLowerCase()) && !filteredsuj.contains(sugg)) {
-				  filteredsuj.add(sugg);
-				}
+	public void setMinDistance(int minDistance) {
+		this.minDistance = minDistance;
+	}
 
-			//if (sugg.toLowerCase().contains(text.toLowerCase())) {
-			//	filteredsuj.add(sugg);
-		//	}
-		}
-		String[] filteredsujArray = filteredsuj.toArray(new String[filteredsuj.size()+1]);
-		
-		filteredsujArray[filteredsuj.size()]=wrongWords2;
-		view.setTextArea3().setListData(filteredsujArray);
-		
-		
 
-	};
+	//String[] items = {"Apple", "Mango", "Orange", "Banana", "Grapes"};
+	 /*
+     * author: Muhammad Atif Siddique
+     * (20F-0106)
+     * 
+     * here is code of highlights of Designing the GUI
+     * */
+	 JTextArea result1;
+	private JTable table;
+	private JScrollPane scrollpane;
+	private JScrollPane scrollpane_1;
+	private DefaultTableModel defaultmodel;
+	
+	
+//	private JTextField searchField;
+    public JList sujList;
+    //private JScrollPane scrollPane;
+//    private String[] suj = {
+//            "POP",
+//            "POPY",
+//            "ALLAH",
+//            "POPA",
+//            "MUHAMMAD"
+//    };
+    //private JTextField textField;
+	
+	
+	
+	 //JComboBox myComboBox ;
+	public DesignPatternHighlight() {
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 596, 584);
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(0, 0, 0, 0));
 
+		setContentPane(contentPane);
+		getContentPane().setBackground(SystemColor.scrollbar);
+		contentPane.setLayout(null);
+		contentPane.setLayout(null);
+		
+		JLabel head_1 = new JLabel("یہاں کوئی بھی متن ٹائپ کریں.........!۔");
+		head_1.setBounds(351, 64, 211, 23);
+		head_1.setFont(new Font("Serif", Font.BOLD, 17));
+		contentPane.add(head_1);
+		
+		  Text1 = new JTextArea();
+		  Text1.setBounds(49, 66, 292, 22);
+		contentPane.add(Text1);
+        Text1.setColumns(10);
+        
+		result1 = new JTextArea();
+		result1.setBounds(49, 133, 388, 22);
+		result1.setBackground(new Color(176, 224, 230));
+		contentPane.add(result1);
+		
+		 Result_btn = new JButton(" کلک");
+		 Result_btn.setBounds(208, 99, 55, 23);
+		 Result_btn.setBackground(Color.MAGENTA);
+		contentPane.add(Result_btn);
+		
+		
+		JLabel resultBtnMemo = new JLabel("چیک کرنے کے لیے کلک کریں.    👈۔");
+		resultBtnMemo.setBounds(273, 108, 134, 14);
+		resultBtnMemo.setFont(new Font("Serif", Font.BOLD, 10));
+		contentPane.add(resultBtnMemo);
+		
+		JLabel welcome = new JLabel("(-------اردو سپیل چیکر-------)");
+		welcome.setBounds(131, 11, 323, 38);
+		welcome.setFont(new Font("Serif", Font.BOLD | Font.ITALIC, 29));
+		contentPane.add(welcome);
+		 //Set the title
+       
+ 
+        //Make the frame visible
+        this.setVisible(true);
+		table = new JTable();
+		table.setBorder(new LineBorder(new Color(0, 0, 0), 2));
+		table.setBackground(new Color(192, 192, 192));
+		table.setBounds(380, 355, 670, 328);
+		scrollpane=new JScrollPane(table,ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		scrollpane.setBounds(262, 381, 300, 100);
+		defaultmodel=new DefaultTableModel();
+		table.setRowSelectionAllowed(false);
+		table.setColumnSelectionAllowed(false);
+		scrollpane.setViewportView(table);
+		contentPane.add(scrollpane);
+		table.setModel(defaultmodel);
+		this.setVisible(true);
+		defaultmodel.addColumn( " + closestWord + ");
+
+		//defaultmodel.addColumn("suggestions");
+		defaultmodel.addColumn("Edit Distance");
+	
+
+        scrollpane_1 = new JScrollPane();
+        scrollpane_1.setBounds(0, 0, 0, 0);
+
+        // add the components to the frame
+        //getContentPane().add(Text1);
+        getContentPane().add(scrollpane_1);
+        
+        // create the list
+        sujList = new JList();
+        sujList.setBounds(303, 157, 134, 213);
+        contentPane.add(sujList);
+        sujList.setVisibleRowCount(20);
+        sujList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        
+    
+        sujList.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e )
+            {
+            	Text1.replaceSelection(sujList.getSelectedValue().toString());
+//            	Text1.setText(sujList.getSelectedValue().toString());
+            
+            } 
+        });
+        
+
+        // set the size and display the window
+        setSize(734, 422);
+       setVisible(true);
+         
+    
+		
+		
+	
+	}
+	public JList getTextArea_2() {
+		return sujList;
+	}
+	//public void 
+//
+//	public void setTextArea_2(JTextArea textArea_2) {
+//		this.sujList = textArea_2;
+//	}
+	public JButton getBtnNewButton() {
+		return Result_btn;
+	}
+
+	public void setBtnNewButton(JButton btnNewButton) {
+		this.Result_btn = btnNewButton;
+	}
+
+	public JTextArea getTextArea() {
+		return Text1;
+	}
+
+	public void setTextArea(JTextArea textArea) {
+		this.Text1 = textArea;
+	}
+	public JTextArea getTextArea_1() {
+		return result1;
+	}
+
+	public void setTextArea_1(JTextArea textArea_1) {
+		this.result1 = textArea_1;
+	}
+	public JList setTextArea3() {
+		return sujList;
+	}
+ 
+
+	public void setTextArea3(JList funcList) {
+		this.sujList = funcList;
+	}
+	public void displayClosestWord(String closestWord2, String inputWord) {
+		// TODO Auto-generated method stub
+		
+	}
 }
